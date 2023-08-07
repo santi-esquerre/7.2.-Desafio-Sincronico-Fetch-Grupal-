@@ -1,0 +1,1 @@
+# 7.2.-Desafio-Sincronico-Fetch-Grupal-
