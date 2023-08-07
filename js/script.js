@@ -4,18 +4,40 @@
 const DATA_URL = "json/data.json"; // URL que contiene los datos que queremos mostrar
 
 const container = document.getElementById("container"); // "Traemos" utilizando el DOM el div de id "container" para colocar la información en él
-
+var students = [];
 /**
  * Función que recibe por parámetro un array con los datos que se mostrarán en el DOM
  * Los datos se mostrarán dentro del div de id "container" y por cada ítem se está creando un nuevo párrafo donde se
  * imprime el campo "name" y el campo "lastname" separados por un espacio
  */
-function showData(dataArray) {
-  // El for itera sobre los elementos del array
-  for (const item of dataArray) {
-    // En la siguiente línea se utilizan "backticks" para armar el String. Más info => https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Template_literals
-    container.innerHTML += `<p> ${item.name} ${item.lastname} </p>`; // Se concatena cada párrafo de la manera que queremos mostrarlo al innerHTML del contenedor
+async function cargarLista() {
+  try {
+    const response = await fetch(DATA_URL);
+    const data = await response.json();
+    console.log(data);
+    students = data.students;
+    console.log(students);
+  } catch (error) {
+    console.error("Error loading JSON:", error);
   }
 }
 
+async function showData() {
+  await cargarLista();
+  container.innerHTML += "<ul>";
+  /*
+  // El for itera sobre los elementos del array
+  students.forEach((student) => {
+    container.innerHTML += `<li><p> ${student.name} ${student.lastname} </p></li>`;
+    console.log(student.name);
+  });
+  */
+  for (const item of students) {
+    // En la siguiente línea se utilizan "backticks" para armar el String. Más info => https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Template_literals
+    container.innerHTML += `<li> ${item.name} ${item.lastname}</li>`; // Se concatena cada párrafo de la manera que queremos mostrarlo al innerHTML del contenedor
+  }
+  container.innerHTML += "</ul>";
+}
+
 // Escribe el código necesario para realizar el fetch al archivo con los datos y mostrar los estudiantes con la función showData
+showData();
